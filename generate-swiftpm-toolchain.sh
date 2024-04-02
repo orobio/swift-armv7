@@ -2,6 +2,11 @@
 set -e
 source swift-define
 
+if [[ -n ${GENERATE_TEMPLATE} ]]; then
+    SWIFTPM_DESTINATION_FILE=${SWIFTPM_DESTINATION_FILE}.template
+    STAGING_DIR=@SYSROOT@
+fi
+
 echo "Generate SwiftPM cross compilation toolchain file"
 rm -f ${SWIFTPM_DESTINATION_FILE}
 touch ${SWIFTPM_DESTINATION_FILE}
