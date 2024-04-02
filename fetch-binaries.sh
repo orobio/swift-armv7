@@ -34,6 +34,7 @@ if [[ -d "$STAGING_DIR/usr/lib" ]]; then
     echo "Use existing Sysroot"
 else
     echo "Download bullseye-armv7.tar"
+    mkdir -p $SRC_ROOT/downloads
     touch $DOWNLOAD_FILE
     wget -q $SRCURL -O $DOWNLOAD_FILE
     mkdir -p $STAGING_DIR
