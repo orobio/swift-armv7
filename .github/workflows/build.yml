@@ -22,3 +22,31 @@ jobs:
           with:
             name: swift-armv7
             path: ./workspace/build/swift-armv7.tar.gz
+
+    deploy:
+        name: Deploy to Docker Hub
+        needs: build-swift-armv7
+        runs-on: ubuntu-latest
+        steps:
+        - name: Check out the repo
+          uses: actions/checkout@v4
+
+        - name: Download Swift Build artifacts
+          uses: actions/download-artifact@v3
+          with:
+            name: swift-armv7
+            path: swift-armv7-cross-bullseye-docker/swift-armv7.tar.gz
+
+        - name: Log in to Docker Hub
+          uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+          with:
+            username: ${{ github.actor }}
+            password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+        - name: Build and push Docker image
+          uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+          with:
+            context: swift-armv7-cross-bullseye-docker
+            file: swift-armv7-cross-bullseye-docker/Dockerfile
+            push: true
+            tags: orobio/swift-armv7-cross-bullseye:latest
